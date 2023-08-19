@@ -12,7 +12,7 @@ datasource db {
 
 model Tenant {
   id         String     @id @default(dbgenerated("concat('tnt_', replace(cast(gen_random_uuid() as text), '-',''))")) @db.Text
-  name       String     @unique
+  name       String?     
   createAt   DateTime   @default(now())
   updateAt   DateTime   @updatedAt
   users      User[]
@@ -23,6 +23,7 @@ model User {
   id         String     @id @default(dbgenerated("concat('usr_', replace(cast(gen_random_uuid() as text), '-',''))")) @db.Text
   email      String     @unique
   name       String?
+  avatar     String?
   createAt   DateTime   @default(now())
   updateAt   DateTime   @updatedAt
   tenantId   String?
@@ -31,14 +32,14 @@ model User {
 }
 
 model Activity {
-  id       String   @id @default(dbgenerated("concat('act_', replace(cast(gen_random_uuid() as text), '-',''))")) @db.Text
+  id       String    @id @default(dbgenerated("concat('act_', replace(cast(gen_random_uuid() as text), '-',''))")) @db.Text
   name     String?
   startAt  DateTime
   endAt    DateTime?
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  createAt DateTime  @default(now())
+  updateAt DateTime  @updatedAt
   tenantId String?
-  tenant   Tenant?  @relation(fields: [tenantId], references: [id])
+  tenant   Tenant?   @relation(fields: [tenantId], references: [id])
   userId   String
-  user     User?    @relation(fields: [userId], references: [id])
+  user     User?     @relation(fields: [userId], references: [id])
 }
